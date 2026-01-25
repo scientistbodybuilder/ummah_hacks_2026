@@ -6,7 +6,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routes import shariah_router
+from routes import shariah_router, upload_router
 
 logging.basicConfig(
     level=logging.DEBUG if os.getenv("DEBUG", "false").lower() == "true" else logging.INFO
@@ -23,6 +23,8 @@ app = FastAPI(
 _origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     "https://sharah-frontend.vercel.app",
     "https://sharah.vercel.app",
 ]
@@ -35,6 +37,7 @@ app.add_middleware(
 )
 
 app.include_router(shariah_router)
+app.include_router(upload_router)
 
 
 @app.get("/health")
