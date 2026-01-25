@@ -1,0 +1,89 @@
+{
+  "principles": {
+    "riba": {
+      "name": "Riba (Interest)",
+      "definition": "Charging interest on money or loans",
+      "status": "Haram (Prohibited)",
+      "reference": "Quran 2:275-2:276, AAOIFI FAS 1"
+    },
+    "musharaka": {
+      "name": "Musharaka (Partnership)",
+      "definition": "Partnership where both parties share profit and loss",
+      "status": "Halal (Permitted)",
+      "reference": "AAOIFI FAS 12"
+    },
+    "murabahah": {
+      "name": "Murabahah (Cost-Plus)",
+      "definition": "Sale with transparent markup on cost",
+      "status": "Halal (Permitted)",
+      "reference": "AAOIFI FAS 2"
+    },
+    "gharar": {
+      "name": "Gharar (Uncertainty)",
+      "definition": "Excessive uncertainty or ambiguity in terms",
+      "status": "Haram (Prohibited)",
+      "reference": "Hadith collections"
+    },
+    "profit-sharing": {
+      "name": "Profit-sharing",
+      "definition": "Revenue or profit sharing between parties",
+      "status": "Halal (Permitted)",
+      "reference": "Islamic finance principles"
+    },
+    "risk-sharing": {
+      "name": "Risk-sharing",
+      "definition": "Shared risk between parties",
+      "status": "Halal (Permitted)",
+      "reference": "Islamic finance principles"
+    },
+    "asset-backed": {
+      "name": "Asset-backed",
+      "definition": "Backed by real assets",
+      "status": "Halal (Permitted)",
+      "reference": "Islamic finance principles"
+    }
+  },
+  "rules": [
+    {
+      "id": "RIBA_001",
+      "description": "Fixed interest rate on money",
+      "condition": "interest_rate > 0 AND profit_sharing_pct == 0",
+      "verdict": "Haram",
+      "confidence_adjustment": -30,
+      "flag": "Fixed interest rate (Riba prohibited)"
+    },
+    {
+      "id": "RIBA_002",
+      "description": "Profit-sharing may not offset interest",
+      "condition": "interest_rate > 0 AND profit_sharing_pct > 0 AND profit_sharing_pct < interest_rate",
+      "verdict": "Uncertain",
+      "confidence_adjustment": -15,
+      "flag": "Profit-sharing may not offset interest"
+    },
+    {
+      "id": "MUSHARAKA_001",
+      "description": "Profit-sharing partnership",
+      "condition": "interest_rate == 0 AND profit_sharing_pct > 0",
+      "verdict": "Halal",
+      "confidence_adjustment": 25,
+      "applicable_fatwa": "musharaka"
+    },
+    {
+      "id": "MURABAHAH_001",
+      "description": "Cost-plus markup structure",
+      "condition": "product_type == murabahah",
+      "verdict": "Halal",
+      "confidence_adjustment": 15,
+      "applicable_fatwa": "murabahah"
+    },
+    {
+      "id": "GHARAR_001",
+      "description": "Excessive uncertainty in terms",
+      "condition": "vague_or_unclear_description",
+      "verdict": "Uncertain",
+      "confidence_adjustment": -15,
+      "flag": "Gharar detected - terms could be clearer",
+      "applicable_fatwa": "gharar"
+    }
+  ]
+}

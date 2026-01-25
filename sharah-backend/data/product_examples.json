@@ -1,0 +1,41 @@
+{
+  "halal_examples": [
+    {
+      "product_type": "revenue-based-advance",
+      "interest_rate": 0,
+      "profit_sharing_pct": 5,
+      "terms_length_months": 12,
+      "description": "VePay revenue-based advance: $50K advance against 5% of daily seller revenue, capped at $60K total repayment"
+    },
+    {
+      "product_type": "musharaka",
+      "interest_rate": 0,
+      "profit_sharing_pct": 50,
+      "terms_length_months": 24,
+      "description": "Joint venture partnership: 50-50 profit and loss sharing over 24 months, transparent accounting."
+    },
+    {
+      "product_type": "murabahah",
+      "interest_rate": 0,
+      "profit_sharing_pct": 10,
+      "terms_length_months": 6,
+      "description": "Cost-plus sale: Asset purchased at $100K, sold at $110K with 10% transparent markup, payment over 6 months."
+    }
+  ],
+  "haram_examples": [
+    {
+      "product_type": "other",
+      "interest_rate": 5,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 12,
+      "description": "Traditional term loan: $100K at 5% annual interest, fixed monthly payments, no profit-sharing."
+    },
+    {
+      "product_type": "other",
+      "interest_rate": 3,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 36,
+      "description": "Fixed-rate savings account: 3% annual interest, no profit-sharing or risk-sharing."
+    }
+  ]
+}
