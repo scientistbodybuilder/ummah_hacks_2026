@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from routes import shariah_router
+from routes.analyze_contract import router as analyze_contract_router
 from engine.engine import analyze_shariah_compliance
 
 logging.basicConfig(
@@ -39,6 +40,7 @@ app.add_middleware(
 )
 
 app.include_router(shariah_router)
+app.include_router(analyze_contract_router)
 
 
 def parse_pdf_text(file_bytes: bytes) -> str:
@@ -70,7 +72,9 @@ def parse_pdf_text(file_bytes: bytes) -> str:
 @app.post("/analyze")
 async def analyze_document(file: UploadFile = File(...)):
     """
-    Analyze a PDF document for Shariah compliance.
+    [DEPRECATED] Analyze a PDF document for Shariah compliance.
+    
+    This endpoint is deprecated. Please use POST /api/analyze-contract instead.
     
     Receives a PDF file, extracts text, and runs Shariah compliance analysis.
     

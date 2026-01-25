@@ -155,9 +155,24 @@ Respond in JSON format with the following structure:
 Provide your Shariah compliance analysis in JSON format."""
 
     # Step 4: Call OpenAI API
+    if client is None:
+        return {
+            "verdict": "ERROR",
+            "confidence": 0,
+            "summary": "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.",
+            "issues": [],
+            "recommendations": [],
+            "reasoning": "OpenAI client is not available. Please configure OPENAI_API_KEY in your environment.",
+            "_metadata": {
+                'chunks_used': [c['filename'] for c in chunks],
+                'total_chunks_matched': len(chunks),
+                'error': "OpenAI API key not configured"
+            }
+        }
+    
     try:
         response = await client.chat.completions.create(
-            model=model,
+            model=model or "gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
