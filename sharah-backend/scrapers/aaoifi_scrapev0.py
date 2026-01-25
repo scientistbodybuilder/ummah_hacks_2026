@@ -56,23 +56,34 @@ for url in urls:
     print("title: ",title)
     content = []
     # Get body text
-    # page_list = WebDriverWait(driver,timeout).until(EC.presence_of_all_elements_located((By.XPATH, "//div[@class='pdfViewer']/div")))
-    # page_list = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.XPATH, "//div[@class='pdfViewer']/div")))
-    # page_count = len(page_list)
-    # print(f"there are {page_count} pages")
+    
+    iframe = driver.find_element(By.CSS_SELECTOR, "iframe[width='1000'][height='1000']")
+    driver.switch_to.frame(iframe)
+
     total_pages_element  = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.ID, "numPages")))
     total_pages = int(re.sub(r"\D", "", total_pages_element.text))
+
+    # frame = WebDriverWait(driver, timeout).until(
+    # EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, "iframe"))
+    # )
+    total_pages_element = WebDriverWait(driver, timeout).until(
+        EC.visibility_of_element_located((By.ID, "numPages"))
+    )
+    total_pages = int(re.sub(r"\D", "", total_pages_element.text))
     for i in range(total_pages):
+        # switch back into the iframe
         print(f"current page: {i+1}")
+        # iframe = driver.find_element(By.CSS_SELECTOR, "iframe[width='1000'][height='1000']")
+        # driver.switch_to.frame(iframe)
         # scroll to that page
-        element = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.XPATH, f"//div[contains(@class, 'page') and @data-page-number='{i+1}']")))
+        element = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.XPATH, f"//div[@class='page' and @data-page-number='{i+1}']")))
         driver.execute_script("arguments[0].scrollIntoView();", element)
 
         # parse text
-        span_list = WebDriverWait(driver,timeout).until(EC.presence_of_all_elements_located((By.XPATH, f"//div[contains(@class, 'page') and @data-page-number='{i+1}']/div[contains(@class, 'textLayer')]/span")))
+        span_list = WebDriverWait(driver,timeout).until(EC.presence_of_all_elements_located((By.XPATH, f"//div[@class='page' and @data-page-number='{i+1}']/div[@class='textLayer']/span")))
         len_lines = len(span_list)
         for j in range(len_lines):
-            lines = WebDriverWait(driver,timeout).until(EC.presence_of_all_elements_located((By.XPATH, f"//div[contains(@class, 'page') and @data-page-number='{i+1}']/div[contains(@class, 'textLayer')]/span")))
+            lines = WebDriverWait(driver,timeout).until(EC.presence_of_all_elements_located((By.XPATH, f"//div[@class='page' and @data-page-number='{i+1}']/div[@class='textLayer']/span")))
 
             try:
                 parsed_text = lines[j].text
