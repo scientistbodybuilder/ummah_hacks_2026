@@ -1,1 +1,0 @@
-# ummah_hacks_2026
