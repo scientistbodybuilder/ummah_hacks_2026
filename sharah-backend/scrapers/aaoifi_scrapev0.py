@@ -57,12 +57,12 @@ for url in urls:
     content = []
     # Get body text
     
-    iframe = driver.find_element(By.CSS_SELECTOR, "iframe[width='1000'][height='1000']")
+    iframe = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.CSS_SELECTOR, "iframe[width='1000'][height='1000']")))
     driver.switch_to.frame(iframe)
 
     total_pages_element  = WebDriverWait(driver,timeout).until(EC.presence_of_element_located((By.ID, "numPages")))
     total_pages = int(re.sub(r"\D", "", total_pages_element.text))
-
+    print("total pages: ",total_pages)
     # frame = WebDriverWait(driver, timeout).until(
     # EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, "iframe"))
     # )
