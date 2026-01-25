@@ -1,5 +1,5 @@
 # Chunk 1: Riba (Interest Prohibition) — Core Definition
-Keywords: riba, interest, apr, compound interest, fixed repayment, loan, qard, principal, lending, interest rate, accrued, charge, interest-bearing
+Keywords: riba, interest, apr, compound interest, fixed repayment, loan, qard, principal, interest rate, accrued, charge, interest-bearing
 
 ## 1-Sentence Rule
 Any premium charged on money (qard) — whether called "interest," "fee," "charges," or "profit" — is strictly Haram unless structurally decoupled from the debt itself (e.g., profit from asset sale, not loan).
