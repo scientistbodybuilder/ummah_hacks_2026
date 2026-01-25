@@ -1,5 +1,7 @@
 # Chunk 6: Revenue-Based Financing (RBF) / Merchant Cash Advance (MCA) — When It Looks Like a Loan
-Keywords: revenue-based, rbf, merchant cash advance, mca, merchant advance, daily settlement, daily payment, percentage of sales, variable repayment, fixed repayment, advance, cap, repayment cap, maturity, buyback, buyback clause, early repayment, buyback option, recall, recall clause
+Keywords: revenue-based, rbf, merchant cash advance, mca, merchant advance, daily settlement, daily payment, percentage of sales, variable repayment, fixed repayment, advance, cap, repayment cap, maturity, buyback, buyback clause, early repayment, buyback option, recall, recall clause, business loan, term loan, working capital
+
+
 
 ## 1-Sentence Rule
 A revenue-based advance is **conditionally Halal only if**:  
