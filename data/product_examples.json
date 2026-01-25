@@ -1,0 +1,51 @@
+[
+    {
+      "name": "Revenue-based advance",
+      "product_type": "revenue-based-advance",
+      "interest_rate": 0,
+      "profit_sharing_pct": 5,
+      "terms_length_months": 12,
+      "description": "Advance of $50K repaid as 5% of daily revenue until $60K cap. No interest. Revenue share."
+    },
+    {
+      "name": "Traditional loan",
+      "product_type": "other",
+      "interest_rate": 5,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 12,
+      "description": "Loan of $20K at 5% APR with fixed monthly repayment schedule."
+    },
+    {
+      "name": "Musharaka partnership",
+      "product_type": "musharaka",
+      "interest_rate": 0,
+      "profit_sharing_pct": 50,
+      "terms_length_months": 12,
+      "description": "Partnership: capital provided, profits shared 50/50. Losses shared by capital contribution."
+    },
+    {
+      "name": "Murabaha (cost-plus sale)",
+      "product_type": "murabahah",
+      "interest_rate": 0,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 10,
+      "description": "We purchase inventory and sell to merchant at disclosed cost-plus markup payable in installments."
+    },
+    {
+      "name": "BNPL with late fee",
+      "product_type": "bnpl",
+      "interest_rate": 0,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 3,
+      "description": "Buy now pay later in 3 installments. Late fee applies if missed payment."
+    },
+    {
+      "name": "Unclear product",
+      "product_type": "other",
+      "interest_rate": 0,
+      "profit_sharing_pct": 0,
+      "terms_length_months": 12,
+      "description": "Funding provided under flexible terms to be determined later."
+    }
+  ]
+  
