@@ -141,7 +141,7 @@ Respond in JSON format with the following structure:
             "severity": "high|medium|low"
         }
     ],
-    "reasoning": "Detailed explanation of the analysis"
+    "reasoning": "Detailed explanation of the analysis, referencing the context document"
 }"""
 
     user_prompt = f"""Analyze the following financial product/contract for Shariah compliance:
