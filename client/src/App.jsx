@@ -92,7 +92,7 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-slate-900 text-white">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
         {/* Navigation */}
         <nav className="w-full py-6 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -104,6 +104,8 @@ function App() {
               Dashboard
             </Link>
           </div>
+          {/* Bottom border line */}
+          <div className="h-0.5 bg-gradient-to-r from-transparent via-teal-500 to-transparent"></div>
         </nav>
 
         {/* Hero Section */}
@@ -324,9 +326,12 @@ function App() {
         </section>
 
         {/* Video Section */}
-        <section className="py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="relative w-full rounded-xl overflow-hidden shadow-2xl" style={{ paddingBottom: '56.25%' }}>
+        <section id="demo" className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12" style={{ fontFamily: "'Sora', sans-serif" }}>
+              See <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">SHARAH</span> in Action
+            </h2>
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/50" style={{ paddingBottom: '56.25%' }}>
               <iframe
                 className="absolute top-0 left-0 w-full h-full"
                 src="https://www.loom.com/embed/your-video-id"
@@ -339,31 +344,34 @@ function App() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <section id="about" className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16" style={{ fontFamily: "'Sora', sans-serif" }}>
+              Why Choose <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">SHARAH</span>?
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Feature 1 */}
-              <div className="bg-slate-700 rounded-xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-200">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-xl font-bold mb-3 text-white">Instant</h3>
+              <div className="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-teal-500/20">
+                <div className="text-5xl mb-4">⚡</div>
+                <h3 className="text-2xl font-bold mb-3 text-white" style={{ fontFamily: "'Sora', sans-serif" }}>Instant</h3>
                 <p className="text-slate-300">
                   Validate products in &lt;1 second, not 3-5 weeks
                 </p>
               </div>
 
               {/* Feature 2 */}
-              <div className="bg-slate-700 rounded-xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-200">
-                <div className="text-4xl mb-4">🎯</div>
-                <h3 className="text-xl font-bold mb-3 text-white">Accurate</h3>
+              <div className="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-teal-500/20">
+                <div className="text-5xl mb-4">🎯</div>
+                <h3 className="text-2xl font-bold mb-3 text-white" style={{ fontFamily: "'Sora', sans-serif" }}>Accurate</h3>
                 <p className="text-slate-300">
                   98% F1 score on Shariah compliance vs 60% for generic AI
                 </p>
-              </div>
+              </div>git checkout
 
               {/* Feature 3 */}
-              <div className="bg-slate-700 rounded-xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-200">
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-xl font-bold mb-3 text-white">Transparent</h3>
+              <div className="bg-slate-800/30 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-teal-500/20">
+                <div className="text-5xl mb-4">📊</div>
+                <h3 className="text-2xl font-bold mb-3 text-white" style={{ fontFamily: "'Sora', sans-serif" }}>Transparent</h3>
                 <p className="text-slate-300">
                   See which fatwas were checked, full audit trail
                 </p>
@@ -373,9 +381,12 @@ function App() {
         </section>
 
         {/* Footer */}
-        <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-slate-800">
-          <div className="max-w-4xl mx-auto text-center text-slate-400">
-            <p>&copy; 2026 SHARAH. All rights reserved.</p>
+        <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-teal-500/20">
+          <div className="max-w-6xl mx-auto text-center text-slate-400">
+            <div className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2" style={{ fontFamily: "'Sora', sans-serif" }}>
+              SHARAH
+            </div>
+            <p className="text-sm">&copy; 2026 SHARAH. Making Islamic finance accessible to all.</p>
           </div>
         </footer>
       </div>
