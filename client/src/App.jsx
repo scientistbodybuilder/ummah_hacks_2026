@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { handleFileChange } from './services/testService'
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
               >
                 Try SHARAH Now
               </Link>
+
+              <input type='file' onChange={handleFileChange} />
             </div>
           </div>
         </section>
