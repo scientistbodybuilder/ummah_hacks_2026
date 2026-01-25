@@ -79,3 +79,7 @@ class ShariaCheckResponse(BaseModel):
         ...,
         description="Next step for user",
     )
+    evidence_used: List[str] = Field(
+        default_factory=list,
+        description="IDs of evidence chunks used from knowledge base",
+    )
