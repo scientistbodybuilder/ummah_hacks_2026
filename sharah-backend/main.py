@@ -25,7 +25,7 @@ app = FastAPI(
 
 # CORS: allow frontend origins (local + production)
 _origins = [
-    "http://localhost:3000",
+    "http://localhost:5173",
     "http://127.0.0.1:3000",
     "https://sharah-frontend.vercel.app",
     "https://sharah.vercel.app",
@@ -103,6 +103,7 @@ async def analyze_document(file: UploadFile = File(...)):
         logger.debug("Parsing PDF text...")
         try:
             extracted_text = parse_pdf_text(file_bytes)
+            print("extracted text: ", extracted_text)
         except Exception as pdf_error:
             logger.error(f"PDF parsing error: {str(pdf_error)}")
             raise HTTPException(

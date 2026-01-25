@@ -73,8 +73,9 @@ def get_chunks(text: str) -> list[dict]:
                 'matched_keywords': matched_keywords,
                 'all_keywords': keywords
             }
+            # print("matched_chunk: ",chunk_info)
             matching_chunks.append(chunk_info)
-    
+    print("Matching chunks: ",[{'title':x['title'], 'keywords': x['matched_keywords']} for x in matching_chunks])
     return matching_chunks
 
 
