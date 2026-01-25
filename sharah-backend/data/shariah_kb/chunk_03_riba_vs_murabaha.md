@@ -1,4 +1,5 @@
 # Chunk 3: Riba vs. Murabaha Profit — Asset Sale (Halal) vs. Pure Loan (Haram)
+Keywords: riba, murabaha, asset sale, profit margin, cost plus, markup, purchase price, ownership, title transfer, asset transfer, bank purchases, bank sells, qard, loan-like, interest disguised as sale
 
 ## 1-Sentence Rule
 The **same monetary return** can be Halal (if from asset sale with disclosed cost + profit margin) or Haram (if from pure lending), depending entirely on whether the financier **owns and transfers an asset** or merely extends credit.

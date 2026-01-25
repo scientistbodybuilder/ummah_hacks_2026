@@ -1,4 +1,5 @@
 # Chunk 4: Late Fees & Penalties — Ta'widh (Cost-Based) vs. Gharamah (Charity-Required)
+Keywords: late fee, penalty, late payment, penalty charge, overdue, charges apply, late interest, penalty interest, penalty APR, default charge, penalty interest, interest on late payment, penalty fee, charge accrues, compounding, penalty compound
 
 ## 1-Sentence Rule
 Late/penalty fees are **conditionally Halal only if they equal actual administrative/recovery costs** (Ta'widh; income to bank) or are **donated to charity** if they exceed costs (Gharamah; not income). Any fee that **profits the creditor from delay** is Riba and Haram.

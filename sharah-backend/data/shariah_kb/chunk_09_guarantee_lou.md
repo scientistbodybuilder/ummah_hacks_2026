@@ -1,4 +1,5 @@
 # Chunk 9: Guarantee Clauses & Letters of Undertaking — Red Flags in Musharaka/Mudaraba
+Keywords: guarantee, letter of undertaking, lou, capital protected, principal guarantee, loss coverage, buyback, buyback clause, buyback guarantee, exit guarantee, redemption guarantee, call option, redemption, floor return, minimum return, guarantee clause, undertaking, guarantee provided, capital guarantee
 
 ## 1-Sentence Rule
 Any **guarantee of capital** (by bank/sponsor) in Musharaka/Mudaraba **automatically converts the contract into a hidden loan** (Qard); investor no longer bears risk, so profit-share is riba (interest), not partnership.

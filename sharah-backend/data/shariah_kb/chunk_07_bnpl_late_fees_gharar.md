@@ -1,4 +1,5 @@
 # Chunk 7: BNPL (Buy Now Pay Later) — Late Fees & Gharar in Modern Fintech
+Keywords: bnpl, buy now pay later, installment, installment plan, no interest, interest-free, 0% interest, late fee, penalty, installment with interest, installment plan with interest, deferred payment, bai muajjal, deferred sale, late payment, penalty, late charge, penalty charge, interest-free period, installment plan
 
 ## 1-Sentence Rule
 BNPL is **conditionally Halal if structured as cost-plus Murabaha** (bank buys, customer gets immediate possession, fixed price, NO interest), but **Haram if late fees profit the lender or terms are vague** (Gharar).

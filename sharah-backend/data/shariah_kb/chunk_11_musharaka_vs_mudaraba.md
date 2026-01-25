@@ -1,4 +1,5 @@
 # Chunk 11: Musharaka vs. Mudaraba — Partnership vs. Mandate Profit-Sharing
+Keywords: musharaka, mudaraba, partnership, profit-share, profit-sharing, partnership profit, profit share ratio, profit share, loss sharing, loss borne, loss sharing, risk-sharing, capital contribution, capital provider, rab al-maal, mudarib, management fee, profit share, profit margin, profit ratio, profit allocation, profit distribution, partnership ratio, equity-like, equity
 
 ## 1-Sentence Rule
 **Musharaka** = both parties contribute capital + management; share profit/loss in agreed ratio.  

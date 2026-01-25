@@ -1,4 +1,5 @@
 # Chunk 10: Gharar in Product Description — Vague Terms & Missing Details
+Keywords: gharar, vague, see terms, terms apply, see terms and conditions, t&c, terms and conditions, details subject to change, terms subject to change, conditions apply, conditions subject to change, at discretion, at bank's discretion, as mutually agreed, to be agreed, to be determined, approximately, up to, estimated, standard terms, market practice, customary charges, details not disclosed, information not disclosed
 
 ## 1-Sentence Rule
 If essential contract terms (cost, profit, risk, penalty, payment schedule, asset details, obligations) are **not clearly stated, not quantifiable, or left to future agreement**, the contract has **Gharar** and is Haram, regardless of profit-sharing or asset mentions.

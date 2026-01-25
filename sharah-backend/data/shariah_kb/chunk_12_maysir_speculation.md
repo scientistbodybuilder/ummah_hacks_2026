@@ -1,4 +1,5 @@
 # Chunk 12: Maysir (Gambling/Speculation) & Gharar — BNPL Encouragement of Debt Traps
+Keywords: maysir, speculation, gambling, betting, debt trap, uncontrolled debt, unlimited, no credit limit, no limit, no debt limit, no cap, borrow as much as you want, unlimited borrowing, unlimited credit, unlimited advance, unlimited BNPL, no affordability check, no income check, no affordability, aggressive marketing, aggressive promotion, rewards, cashback, loyalty points, stack purchases, stack BNPL, swipe now pay later, instant payment, frictionless, no friction, overspending, encourage spending, encourage debt, encourage overuse, encourage over-borrowing, encoruage traps, encourage addiction
 
 ## 1-Sentence Rule
 **Maysir** (gambling/speculation) is **strictly Haram**; BNPL/fintech products that **encourage unplanned spending or trap users in escalating debt cycles** violate this principle, even if individual transactions are technically Halal.

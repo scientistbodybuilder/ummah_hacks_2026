@@ -1,4 +1,5 @@
 # Chunk 5: Profit-Sharing vs. Guaranteed Return — Risk-Sharing (Musharaka/Mudaraba)
+Keywords: profit-sharing, guaranteed return, fixed return, minimum return, return guarantee, capital protected, principal guarantee, no loss of capital, protected capital, no loss of principal, return floor, minimum interest, fixed interest, guaranteed dividend, guaranteed return, earnings guarantee
 
 ## 1-Sentence Rule
 In genuine Musharaka/Mudaraba, **all partners/investors must share in actual profits AND losses** (including loss of capital); any guarantee of capital or return is Haram and collapses the structure into a hidden loan.

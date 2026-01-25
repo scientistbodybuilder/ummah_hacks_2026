@@ -1,4 +1,5 @@
 # Chunk 8: Murabaha (Cost-Plus Sale) — Asset Backing & Disclosure Requirements
+Keywords: murabaha, cost-plus, asset sale, cost disclosed, cost not disclosed, purchase price, profit margin, asset transfer, bank owns, bank purchases, bank sells, asset backing, collateral, lien, bank retains title, customer owns, ownership transfer, cost plus profit, profit margin, profit markup
 
 ## 1-Sentence Rule
 Murabaha is Halal **only if**: (1) Bank genuinely **owns and purchases the asset first**, (2) **Cost + profit margin disclosed and agreed upfront**, (3) **Asset transferred to customer** (not collateral), and (4) **Customer bears asset risk**.

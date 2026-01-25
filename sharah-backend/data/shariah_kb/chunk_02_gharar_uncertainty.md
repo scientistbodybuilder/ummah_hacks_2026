@@ -1,4 +1,5 @@
 # Chunk 2: Gharar (Excessive Uncertainty) — What Vagueness Kills Contracts
+Keywords: gharar, uncertainty, vague, subject to, up to, at discretion, terms may vary, unclear, ambiguous, see terms, terms apply, conditions apply, conditions subject to change
 
 ## 1-Sentence Rule
 A contract is Haram if essential terms (price, delivery, quantity, risk allocation, penalties, fees, obligations) are **unclear, ambiguous, or unknowable** to one or both parties at the time of agreement.
