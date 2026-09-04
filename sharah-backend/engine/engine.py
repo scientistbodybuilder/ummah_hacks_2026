@@ -196,3 +196,10 @@ Provide your Shariah compliance analysis in JSON format."""
                 'error': str(e)
             }
         }
+
+
+async def llm_verification(ruling: str, chunk: str, model: str = "gpt-40-mini"):
+
+    context_files = glob.glob(str(SHARIAH_KB_PATH / "*.md"))
+    print("Context files found:", context_files)
+    # context = [f for f in context_files if ruling in f.split('/')]
