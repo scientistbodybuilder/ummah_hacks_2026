@@ -4,36 +4,83 @@ import {
   FolderOpen,
   ScanLine,
   ShieldCheck,
-  Sparkles,
   Upload,
   WalletCards,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner"
 import { Button } from "./ui/button";
+import { uploadFile } from '../services/uploadServices'
+import ClauseBreakdown from './analyze/ClauseBreakdown'
+import RecentUploadSheet from './analyze/RecentUploadSheet'
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+import type { ClauseCardProps } from './analyze/ClauseCard'
+
+interface ErrorTypes {
+  file?: string
+  analyze?: string
+}
+
+
+
 
 const Analyze = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<ErrorTypes>({});
+  // const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<Record<string, ClauseCardProps[]>>({});
+  const queryClient = useQueryClient();
   const handleFile = (file?: File) => {
-    if (file) setFileName(file.name);
+    if (file && file.type === 'application/pdf') {
+      setFileName(file.name);
+      setSelectedFile(file);
+    } else {
+      setErrors({ ...errors, file: "Please upload a valid PDF file." });
+    }
   };
+
+  const { mutate: analyzeFile, isPending } = useMutation({
+      mutationFn: (file: File) => uploadFile(file),
+      onSuccess: (data, file) => {
+          console.log('analyze result:', data)
+          setResults(data)
+          queryClient.setQueryData(['analysis', file.name], data)
+      },
+      onError: (err) => {
+          console.error('Error uploading file:', err)
+          setErrors({ ...errors, analyze: "Error analyzing file." })
+      },
+  })
+
+  const handleAnalyze = () => {
+      if (selectedFile) {
+        // setResults({})
+        analyzeFile(selectedFile)
+      }
+  }
+
   return (
-    <main className="analyze-page">
+    <main className="analyze-page min-h-[calc(100dvh-52px-140px)] grow flex flex-col items-center justify-center gap-4">
+      <div className="w-full flex justify-start m-0 cursor-pointer">
+        <RecentUploadSheet setResults={setResults} setFileName={setFileName} />
+      </div>
+      
       <section className="audit-panel gap-2" aria-labelledby="upload-heading">
-        <div className="panel-intro">
-          <div className="document-icon">
-            <FileText />
-          </div>
-          <div className="intro-copy">
+        <div className="panel-intro py-2 flex flex-col items-start sm:flex-row sm:items-center">
+          
+          <div className="intro-copy flex items-center gap-2">
+            <div className="document-icon">
+                <FileText />
+            </div>
             <div className="title-line">
               <h1 id="upload-heading">Upload Student Loan Agreement</h1>
-              <span className="step-pill">Step 1 of 2</span>
+              {/* <span className="step-pill">Step 1 of 2</span> */}
             </div>
-            {/* <p>
-              Automated Shariah Fiqh clause extraction &amp; AAOIFI Standard No.
-              8 &amp; 9 compliance check
-            </p> */}
           </div>
-          <div className="privacy-pill">
+
+          <div className="privacy-pill gap-2">
             <ShieldCheck /> Zero Data Retention • End-to-End Encrypted
           </div>
         </div>
@@ -94,34 +141,9 @@ const Analyze = () => {
             onChange={(event) => handleFile(event.target.files?.[0])}
           />
         </div>
-        {/* <div className="sample-row">
-          <div>
-            <Sparkles />
-            <strong>Try a sample contract to see an audit:</strong>
-          </div>
-          <div className="sample-actions">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setFileName("Direct Unsubsidized MPN (2024-25).pdf")
-              }
-            >
-              Direct Unsubsidized MPN (2024-25)
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setFileName("Sallie Mae Private Promissory Note.pdf")
-              }
-            >
-              Sallie Mae Private Promissory Note
-            </Button>
-          </div>
-        </div> */}
-        <Button disabled={fileName === ""} className='bg-(--accent-color) w-full rounded-md cursor-pointer hover:bg-(--accent-color)/90'>
-            Upload
+          {errors?.file && <p className="text-(--non-compliant) text-xs text-center">{errors.file}.</p>}
+        <Button onClick={() => handleAnalyze()} disabled={fileName === "" || isPending} className='bg-(--accent-color) w-full rounded-md cursor-pointer hover:bg-(--accent-color)/90'>
+            { isPending ? <Spinner /> : "Analyze" }
         </Button>
         <div className="feature-grid">
           <Feature icon={<ShieldCheck />} title="AAOIFI Shariah Standards">
@@ -138,6 +160,8 @@ const Analyze = () => {
           </Feature>
         </div>
       </section>
+
+      {Object.values(results).some((clauses) => clauses.length > 0) && <ClauseBreakdown data={results} file={fileName} />}
     </main>
   );
 };

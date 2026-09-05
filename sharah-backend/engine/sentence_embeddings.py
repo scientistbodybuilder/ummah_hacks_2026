@@ -2,7 +2,7 @@ from transformers.utils import logging
 import numpy as np
 # from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
-from rulings import rulings
+from engine.rulings import rulings
 
 logging.set_verbosity_error()
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
