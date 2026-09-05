@@ -5,6 +5,12 @@
 **Status:** Ready for Development  
 **Audience:** Developers, AI Assistants (Cursor), Technical Reviewers
 
+## RUN COMMANDS
+### Frontend
+npm run dev
+
+### Backend
+uvicorn main:app --reload 
 ---
 
 ## TABLE OF CONTENTS

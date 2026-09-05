@@ -4,13 +4,18 @@ import logging
 import os
 import fitz  # PyMuPDF
 from io import BytesIO
+from langchain_core.documents import Document
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from transformers import AutoTokenizer
 
 from routes import shariah_router
-from engine.engine import analyze_shariah_compliance
+from engine.engine import llm_verification
+from engine.rulings import rulings
+from engine.sentence_embeddings import get_ruling_embeddings, embed_document_chunk, max_ruling_chunk_similarity
 
 logging.basicConfig(
     level=logging.DEBUG if os.getenv("DEBUG", "false").lower() == "true" else logging.INFO
@@ -21,6 +26,13 @@ app = FastAPI(
     title="SHARAH API",
     description="Shariah compliance validation for Islamic financial products",
     version="1.0.0",
+)
+
+tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
+    tokenizer=tokenizer,
+    chunk_size=120, 
+    chunk_overlap=15, 
 )
 
 # CORS: allow frontend origins (local + production)
@@ -66,19 +78,11 @@ def parse_pdf_text(file_bytes: bytes) -> str:
     
     return "\n\n".join(text_parts)
 
-
-@app.post("/analyze")
-async def analyze_document(file: UploadFile = File(...)):
+@app.post("/api/pipeline")
+async def embed_document(file: UploadFile = File(...)):
     """
-    Analyze a PDF document for Shariah compliance.
-    
-    Receives a PDF file, extracts text, and runs Shariah compliance analysis.
-    
-    Args:
-        file: Uploaded PDF file
-        
-    Returns:
-        JSON response with analysis results or error details
+    Embed a PDF document for further processing.
+
     """
     # Validate file type
     if not file.filename.lower().endswith('.pdf'):
@@ -87,77 +91,90 @@ async def analyze_document(file: UploadFile = File(...)):
             status_code=400,
             detail="Invalid file type. Please upload a PDF file."
         )
-    
+
     try:
-        # Read file contents
-        logger.info(f"Processing file: {file.filename}")
-        file_bytes = await file.read()
-        
-        if not file_bytes:
-            raise HTTPException(
-                status_code=400,
-                detail="Empty file uploaded."
-            )
-        
-        # Parse PDF text
-        logger.debug("Parsing PDF text...")
-        try:
-            extracted_text = parse_pdf_text(file_bytes)
-            print("extracted text: ", extracted_text)
-        except Exception as pdf_error:
-            logger.error(f"PDF parsing error: {str(pdf_error)}")
-            raise HTTPException(
-                status_code=400,
-                detail=f"Failed to parse PDF: {str(pdf_error)}"
-            )
-        
-        if not extracted_text.strip():
-            raise HTTPException(
-                status_code=400,
-                detail="No text could be extracted from the PDF. The file may be empty or contain only images."
-            )
-        
-        logger.info(f"Extracted {len(extracted_text)} characters from PDF")
-        logger.debug(f"First 500 chars: {extracted_text[:500]}")
-        
-        # Run Shariah compliance analysis
-        logger.info("Running Shariah compliance analysis...")
-        try:
-            result = await analyze_shariah_compliance(extracted_text)
-        except Exception as analysis_error:
-            logger.error(f"Analysis error: {str(analysis_error)}")
-            raise HTTPException(
-                status_code=500,
-                detail=f"Analysis failed: {str(analysis_error)}"
-            )
-        
-        # Check if result indicates an error from the engine
-        if result.get("verdict") == "ERROR":
-            logger.error(f"Engine returned error: {result.get('summary')}")
+            # get the embeddings for the shariah rules
+            ruling_keys = rulings.keys()
+            ruling_embeddings = {}
+            ruling_chunk_matching = {}
+            ruling_llm_response = {}
+            for key in ruling_keys:
+                ruling_embeddings[key] = get_ruling_embeddings(key)
+                ruling_chunk_matching[key] = []
+                ruling_llm_response[key] = []
+            
+
+            print("ruling embeddings: ", ruling_embeddings)
+            # Read file contents
+            logger.info(f"Processing file: {file.filename}")
+            file_bytes = await file.read()
+            
+            if not file_bytes:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Empty file uploaded."
+                )
+            
+            # Parse PDF text
+            logger.debug("Parsing PDF text...")
+            try:
+                extracted_text = parse_pdf_text(file_bytes)
+                print("extracted text: ", extracted_text)
+            except Exception as pdf_error:
+                logger.error(f"PDF parsing error: {str(pdf_error)}")
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Failed to parse PDF: {str(pdf_error)}"
+                )
+            
+            if not extracted_text.strip():
+                raise HTTPException(
+                    status_code=400,
+                    detail="No text could be extracted from the PDF. The file may be empty or contain only images."
+                )
+            
+            logger.info(f"Extracted {len(extracted_text)} characters from PDF")
+            # logger.debug(f"First 500 chars: {extracted_text[:500]}")
+            # here we have the extracted text, we should break it into chunks and embed each
+            all_splits = text_splitter.split_documents([Document(page_content=extracted_text)])
+            print("We have", len(all_splits), "splits for the document")
+
+            #iterate through the chunks
+            for chunk in all_splits:
+                chunk_embedding = embed_document_chunk(chunk.page_content)
+                print("Embedded chunk with length:", len(chunk.page_content))
+                for ruling in ruling_keys:
+                    similarity = max_ruling_chunk_similarity(chunk_embedding, ruling_embeddings[ruling])
+                    print("similarity:", similarity)
+                    ruling_chunk_matching[ruling].append((chunk, similarity))
+
+            print("ruling chunk matching: ", ruling_chunk_matching)
+            # sort the similarities and keep top X
+            for ruling in ruling_keys:
+                similar_chunks = sorted(ruling_chunk_matching[ruling], key=lambda x: x[1], reverse=True)[:10]
+                print(f"sorted similarity for ruling '{ruling}': ", [s for _, s in similar_chunks])
+                # for each chunk, use the LLM to verify whether it is a violation of the ruling
+                # print(f"Similar chunks for ruling '{ruling}':")
+                for chunk, similarity in similar_chunks:
+                    try:
+                        # print(f"  - Chunk: {chunk.page_content[:100]}... (Similarity: {similarity})")
+                        llm_response = await llm_verification(ruling, chunk.page_content)
+                        ruling_llm_response[ruling].append(llm_response)
+                    except Exception as e:
+                        print("Error occurred during LLM verification:", e)
+                        logger.error(f"Unexpected error during llm verification for ruling '{ruling}': {str(e)}")
+
+            print("ruling llm response: ", ruling_llm_response)
             return JSONResponse(
-                status_code=500,
+                status_code=200,
                 content={
-                    "success": False,
-                    "error": result.get("summary"),
-                    "details": result
+                    "success": True,
+                    "filename": file.filename,
+                    "text_length": len(extracted_text),
+                    "data": ruling_llm_response
                 }
             )
-        
-        logger.info(f"Analysis complete. Suggestion: {result.get('suggestion', 'N/A')}")
-        
-        return JSONResponse(
-            status_code=200,
-            content={
-                "success": True,
-                "filename": file.filename,
-                "text_length": len(extracted_text),
-                "result": result
-            }
-        )
-        
-    except HTTPException:
-        # Re-raise HTTP exceptions as-is
-        raise
+            
     except Exception as e:
         # Catch any unexpected errors
         logger.exception(f"Unexpected error processing file: {str(e)}")
@@ -165,6 +182,108 @@ async def analyze_document(file: UploadFile = File(...)):
             status_code=500,
             detail=f"An unexpected error occurred: {str(e)}"
         )
+    
+
+
+# @app.post("/analyze")
+# async def analyze_document(file: UploadFile = File(...)):
+#     """
+#     Analyze a PDF document for Shariah compliance.
+    
+#     Receives a PDF file, extracts text, and runs Shariah compliance analysis.
+    
+#     Args:
+#         file: Uploaded PDF file
+        
+#     Returns:
+#         JSON response with analysis results or error details
+#     """
+#     # Validate file type
+#     if not file.filename.lower().endswith('.pdf'):
+#         logger.warning(f"Invalid file type uploaded: {file.filename}")
+#         raise HTTPException(
+#             status_code=400,
+#             detail="Invalid file type. Please upload a PDF file."
+#         )
+    
+#     try:
+#         # Read file contents
+#         logger.info(f"Processing file: {file.filename}")
+#         file_bytes = await file.read()
+        
+#         if not file_bytes:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Empty file uploaded."
+#             )
+        
+#         # Parse PDF text
+#         logger.debug("Parsing PDF text...")
+#         try:
+#             extracted_text = parse_pdf_text(file_bytes)
+#             print("extracted text: ", extracted_text)
+#         except Exception as pdf_error:
+#             logger.error(f"PDF parsing error: {str(pdf_error)}")
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail=f"Failed to parse PDF: {str(pdf_error)}"
+#             )
+        
+#         if not extracted_text.strip():
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="No text could be extracted from the PDF. The file may be empty or contain only images."
+#             )
+        
+#         logger.info(f"Extracted {len(extracted_text)} characters from PDF")
+#         logger.debug(f"First 500 chars: {extracted_text[:500]}")
+#         # here we have the extracted text, we should break it into chunks and embed each
+        
+#         # Run Shariah compliance analysis
+#         logger.info("Running Shariah compliance analysis...")
+#         try:
+#             result = await analyze_shariah_compliance(extracted_text)
+#         except Exception as analysis_error:
+#             logger.error(f"Analysis error: {str(analysis_error)}")
+#             raise HTTPException(
+#                 status_code=500,
+#                 detail=f"Analysis failed: {str(analysis_error)}"
+#             )
+        
+#         # Check if result indicates an error from the engine
+#         if result.get("verdict") == "ERROR":
+#             logger.error(f"Engine returned error: {result.get('summary')}")
+#             return JSONResponse(
+#                 status_code=500,
+#                 content={
+#                     "success": False,
+#                     "error": result.get("summary"),
+#                     "details": result
+#                 }
+#             )
+        
+#         logger.info(f"Analysis complete. Suggestion: {result.get('suggestion', 'N/A')}")
+        
+#         return JSONResponse(
+#             status_code=200,
+#             content={
+#                 "success": True,
+#                 "filename": file.filename,
+#                 "text_length": len(extracted_text),
+#                 "result": result
+#             }
+#         )
+        
+#     except HTTPException:
+#         # Re-raise HTTP exceptions as-is
+#         raise
+#     except Exception as e:
+#         # Catch any unexpected errors
+#         logger.exception(f"Unexpected error processing file: {str(e)}")
+#         raise HTTPException(
+#             status_code=500,
+#             detail=f"An unexpected error occurred: {str(e)}"
+#         )
 
 
 @app.get("/health")
