@@ -285,11 +285,9 @@
   gap: 8px;
 }
 .feature-icon {
-  flex: 0 0 18px;
+  display:flex;
   width: 18px;
   height: 18px;
-  display: grid;
-  place-items: center;
   border-radius: 6px;
   color: var(--accent-color);
   background: var(--background-dark);

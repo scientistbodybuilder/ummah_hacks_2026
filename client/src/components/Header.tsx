@@ -11,7 +11,7 @@ const Header = () => {
             Sharah <span className="text-xs bg-(--background-dark)">v1.0</span>
           </div>
           <div className="brand-tagline">
-            Islamic Finance AI Compliance Checker
+            AI Islamic Finance Compliance Checker
           </div>
         </div>
       </div>

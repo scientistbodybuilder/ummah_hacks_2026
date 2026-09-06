@@ -142,7 +142,7 @@ const Analyze = () => {
           />
         </div>
           {errors?.file && <p className="text-(--non-compliant) text-xs text-center">{errors.file}.</p>}
-        <Button onClick={() => handleAnalyze()} disabled={fileName === "" || isPending} className='bg-(--accent-color) w-full rounded-md cursor-pointer hover:bg-(--accent-color)/90'>
+        <Button onClick={() => handleAnalyze()} disabled={selectedFile === null || isPending} className='bg-(--accent-color) w-full rounded-md cursor-pointer hover:bg-(--accent-color)/90'>
             { isPending ? <Spinner /> : "Analyze" }
         </Button>
         <div className="feature-grid">
@@ -177,7 +177,7 @@ function Feature({
 }) {
   return (
     <div className="feature-item">
-      <div className="feature-icon">{icon}</div>
+      <div className="feature-icon flex items-center justify-center p-1">{icon}</div>
       <div>
         <strong>{title}</strong>
         <p>{children}</p>
