@@ -208,8 +208,8 @@ async def llm_verification(ruling: str, chunk: str):
     with open(context_files[0], 'r', encoding='utf-8') as f:
         content = f.read() # chunk content, will be knowledge base for llm
 
-        system_prompt = f"""You are SHARAH, an expert Islamic finance compliance analyzer. 
-        Your task is to analyze a passage from a financial product or contract for Shariah compliance.
+        system_prompt = f"""You are SHARAH, an expert Islamic finance compliance analyzer for student loan agreements. 
+        Your task is to analyze a passage from a student loan agreement for Shariah compliance.
         
         You must evaluate based on the principle of {ruling}
         

@@ -27,7 +27,7 @@ const Header = () => {
         <Button variant="outline" size="sm" className="export-button cursor-pointer">
           <Download /> Export Report
         </Button>
-        <Button
+        {/* <Button
           variant="outline"
           size="icon"
           aria-label="Notifications"
@@ -35,7 +35,7 @@ const Header = () => {
         >
           <Bell />
           <i />
-        </Button>
+        </Button> */}
       </div>
     </header>
   );

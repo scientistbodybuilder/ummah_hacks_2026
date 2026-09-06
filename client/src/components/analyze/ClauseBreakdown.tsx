@@ -37,63 +37,74 @@ const ClauseBreakdown = ({ data, file }: { data: Record<string, ClauseCardProps[
                                 setPage(1)
                             }}
                         >
-                            {key}
+                            {key} {key === 'riba' ? '(Interest)' : '(Uncertainty)'}
                         </button>
                     ))}
                 </div>
             </div>
 
             <h3 className="text-(--accent-color) text-sm font-bold mb-4">Analysis of {file}</h3>
+            {visibleClauses.length > 0 ? (<>
+                <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
+                    {visibleClauses?.map((clause) => <ClauseCard {...clause} />)}
+                </div>
 
-            <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
-                {visibleClauses?.map((clause) => <ClauseCard {...clause} />)}
-            </div>
-
-            {pageCount > 1 && (
-                <Pagination className="mt-7">
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious
-                                href="#seminar-library"
-                                aria-disabled={page === 1}
-                                className={page === 1 ? "pointer-events-none opacity-40" : undefined}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    if (page > 1) setPage((current) => current - 1);
-                                }}
-                            />
-                        </PaginationItem>
-                        {Array.from({ length: pageCount }, (_, index) => {
-                            const pageNumber = index + 1;
-                            return (
-                                <PaginationItem key={pageNumber}>
-                                    <PaginationLink
-                                        href="#seminar-library"
-                                        isActive={page === pageNumber}
-                                        onClick={(event) => {
-                                            event.preventDefault();
-                                            setPage(pageNumber);
-                                        }}
-                                    >
-                                        {pageNumber}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            );
-                        })}
-                        <PaginationItem>
-                            <PaginationNext
-                                href="#seminar-library"
-                                aria-disabled={page === pageCount}
-                                className={page === pageCount ? "pointer-events-none opacity-40" : undefined}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    if (page < pageCount) setPage((current) => current + 1);
-                                }}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+                {pageCount > 1 && (
+                    <Pagination className="mt-7">
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    href="#seminar-library"
+                                    aria-disabled={page === 1}
+                                    className={page === 1 ? "pointer-events-none opacity-40" : undefined}
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        if (page > 1) setPage((current) => current - 1);
+                                    }}
+                                />
+                            </PaginationItem>
+                            {Array.from({ length: pageCount }, (_, index) => {
+                                const pageNumber = index + 1;
+                                return (
+                                    <PaginationItem key={pageNumber}>
+                                        <PaginationLink
+                                            href="#seminar-library"
+                                            isActive={page === pageNumber}
+                                            onClick={(event) => {
+                                                event.preventDefault();
+                                                setPage(pageNumber);
+                                            }}
+                                        >
+                                            {pageNumber}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                );
+                            })}
+                            <PaginationItem>
+                                <PaginationNext
+                                    href="#seminar-library"
+                                    aria-disabled={page === pageCount}
+                                    className={page === pageCount ? "pointer-events-none opacity-40" : undefined}
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        if (page < pageCount) setPage((current) => current + 1);
+                                    }}
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                )}
+            
+            </>) :
+            
+            (
+                <p className="text-center text-muted-foreground text-xs md:text-sm">
+                    No clauses relevant to {ruling} found.
+                </p>
             )}
+            
+
+            
 
         </section>
     )

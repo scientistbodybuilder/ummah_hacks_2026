@@ -161,7 +161,7 @@ const Analyze = () => {
         </div>
       </section>
 
-      {Object.values(results).some((clauses) => clauses.length > 0) && <ClauseBreakdown data={results} file={fileName} />}
+      <ClauseBreakdown data={results} file={fileName} />
     </main>
   );
 };

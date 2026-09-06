@@ -146,7 +146,8 @@ async def embed_document(file: UploadFile = File(...)):
                 for ruling in ruling_keys:
                     similarity = max_ruling_chunk_similarity(chunk_embedding, ruling_embeddings[ruling])
                     print("similarity:", similarity)
-                    ruling_chunk_matching[ruling].append((chunk, similarity))
+                    if (similarity > 0.5):  # Adjust threshold as needed
+                        ruling_chunk_matching[ruling].append((chunk, similarity))
 
             print("ruling chunk matching: ", ruling_chunk_matching)
             # sort the similarities and keep top X
