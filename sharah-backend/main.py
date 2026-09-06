@@ -52,6 +52,12 @@ app.add_middleware(
 
 app.include_router(shariah_router)
 
+def get_chunk_page(chunk: str, text_pages: list) -> int:
+    for i, page_info in enumerate(text_pages):
+        if chunk in page_info['text']:
+            return page_info['page']
+    return -1
+
 
 def parse_pdf_text(file_bytes: bytes) -> str:
     """
@@ -64,6 +70,7 @@ def parse_pdf_text(file_bytes: bytes) -> str:
         Extracted text as a single string
     """
     text_parts = []
+    text_pages = []
     
     # Open PDF from bytes
     pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
@@ -73,10 +80,13 @@ def parse_pdf_text(file_bytes: bytes) -> str:
         text = page.get_text()
         if text.strip():
             text_parts.append(text)
-    
+        text_pages.append({
+            "page": page_num,
+            "text": text
+        })
     pdf_document.close()
     
-    return "\n\n".join(text_parts)
+    return "\n\n".join(text_parts), text_pages
 
 @app.post("/api/pipeline")
 async def embed_document(file: UploadFile = File(...)):
@@ -118,7 +128,7 @@ async def embed_document(file: UploadFile = File(...)):
             # Parse PDF text
             logger.debug("Parsing PDF text...")
             try:
-                extracted_text = parse_pdf_text(file_bytes)
+                extracted_text, text_pages = parse_pdf_text(file_bytes)
                 print("extracted text: ", extracted_text)
             except Exception as pdf_error:
                 logger.error(f"PDF parsing error: {str(pdf_error)}")
@@ -142,24 +152,25 @@ async def embed_document(file: UploadFile = File(...)):
             #iterate through the chunks
             for chunk in all_splits:
                 chunk_embedding = embed_document_chunk(chunk.page_content)
+                chunk_page = get_chunk_page(chunk.page_content, text_pages)
                 print("Embedded chunk with length:", len(chunk.page_content))
                 for ruling in ruling_keys:
                     similarity = max_ruling_chunk_similarity(chunk_embedding, ruling_embeddings[ruling])
                     print("similarity:", similarity)
                     if (similarity > 0.5):  # Adjust threshold as needed
-                        ruling_chunk_matching[ruling].append((chunk, similarity))
+                        ruling_chunk_matching[ruling].append((chunk, similarity, chunk_page))
 
             print("ruling chunk matching: ", ruling_chunk_matching)
             # sort the similarities and keep top X
             for ruling in ruling_keys:
                 similar_chunks = sorted(ruling_chunk_matching[ruling], key=lambda x: x[1], reverse=True)[:10]
-                print(f"sorted similarity for ruling '{ruling}': ", [s for _, s in similar_chunks])
+                print(f"sorted similarity for ruling '{ruling}': ", [s for _, s, _ in similar_chunks])
                 # for each chunk, use the LLM to verify whether it is a violation of the ruling
                 # print(f"Similar chunks for ruling '{ruling}':")
-                for chunk, similarity in similar_chunks:
+                for chunk, similarity, chunk_page in similar_chunks:
                     try:
                         # print(f"  - Chunk: {chunk.page_content[:100]}... (Similarity: {similarity})")
-                        llm_response = await llm_verification(ruling, chunk.page_content)
+                        llm_response = await llm_verification(ruling, chunk.page_content, chunk_page)
                         ruling_llm_response[ruling].append(llm_response)
                     except Exception as e:
                         print("Error occurred during LLM verification:", e)

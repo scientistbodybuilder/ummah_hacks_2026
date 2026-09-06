@@ -26,6 +26,7 @@ export interface ClauseCardProps {
     reasoning: string
     suggestion: string
     chunk: string
+    chunkPage: number
 }
 
 function SuggestionIcon (suggestion: string) {
@@ -61,7 +62,7 @@ function SuggestionIcon (suggestion: string) {
     }
 }
 
-const ClauseCard = ({ confidence, ruling, summary, reasoning, suggestion, chunk }: ClauseCardProps) => {
+const ClauseCard = ({ confidence, ruling, summary, reasoning, suggestion, chunk, chunkPage }: ClauseCardProps) => {
 
 
 
@@ -79,7 +80,7 @@ const ClauseCard = ({ confidence, ruling, summary, reasoning, suggestion, chunk 
 
             <CardContent className="w-full flex flex-col gap-3 justify-start items-center px-2 pb-2">
                 <div className="px-2 py-2 w-full border-border rounded-md bg-(--background-dark)/60 border border-[#ccc] flex flex-col items-start justify-start">
-                    <h4 className="text-muted-foreground text-xs">Page: X</h4>
+                    <h4 className="text-muted-foreground text-xs">Page: {chunkPage}</h4>
                     <p className="text-black text-xs text-left text-italic mt-1">"{chunk}"</p>
                 </div>
 

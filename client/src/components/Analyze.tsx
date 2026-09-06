@@ -161,7 +161,9 @@ const Analyze = () => {
         </div>
       </section>
 
-      <ClauseBreakdown data={results} file={fileName} />
+      {fileName != "" && Object.keys(results).length > 0 && (
+        <ClauseBreakdown data={results} file={fileName} />
+      )}
     </main>
   );
 };

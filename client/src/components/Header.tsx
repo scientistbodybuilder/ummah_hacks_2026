@@ -24,9 +24,9 @@ const Header = () => {
         >
           <Moon />
         </Button> */}
-        <Button variant="outline" size="sm" className="export-button cursor-pointer">
+        {/* <Button variant="outline" size="sm" className="export-button cursor-pointer">
           <Download /> Export Report
-        </Button>
+        </Button> */}
         {/* <Button
           variant="outline"
           size="icon"

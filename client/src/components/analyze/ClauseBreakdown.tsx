@@ -9,25 +9,45 @@ import {
 } from "@/components/ui/pagination"
 import { useMemo, useState } from 'react'
 import ClauseCard from "./ClauseCard"
+import { Download } from "lucide-react";
 import type {ClauseCardProps} from './ClauseCard'
+import { Button } from "../ui/button";
+import { buildReport } from '../../services/pdfServices'
 
 
 
 const ClauseBreakdown = ({ data, file }: { data: Record<string, ClauseCardProps[]>; file: string }) => {
     const [page, setPage] = useState(1)
     const pageSize = 4
-    const [ruling, setRuling] = useState(Object.keys(data)[0])
+    const [ruling, setRuling] = useState(Object.keys(data)[0] ?? 'riba')
     const visibleClauses = useMemo(() => {
         const start = (page - 1) * pageSize
+        // console.log(Object.keys(data)[0])
+        // console.log('ruling:', ruling)
+        // console.log(data[ruling])
         return data[ruling]?.slice(start, start + pageSize) || []
     }, [data, page, ruling])
     const pageCount = Math.ceil((data[ruling]?.length || 0) / pageSize)
 
+    const downloadPDF = (data:any, file:any) => {
+        try {
+            console.log('building report')
+            buildReport({ data, file })
+        } catch (err) {
+            console.error('Error occurred while generating PDF report:', err)
+        }
+    }
+
     return (
         <section className="w-full max-w-[1100px] scroll-mt-20 flex flex-col items-center justify-start">
 
-            <div className="w-full flex items-center justify-end">
-                <div className="rounded-[36px] border-muted-foreground bg-(--background-dark) p-1 w-auto mb-6">
+            <div className="w-full flex items-center justify-between mb-6">
+                {Object.keys(data).length > 0 && (
+                    <Button onClick={() => downloadPDF(data, file)} variant="outline" size="sm" className="export-button cursor-pointer">
+                        <Download /> Export Report
+                    </Button>
+                )}
+                <div className="rounded-[36px] border-muted-foreground bg-(--background-dark) p-1 w-auto">
                     {Object.keys(data).map((key) => (
                         <button
                             key={key}
@@ -37,7 +57,7 @@ const ClauseBreakdown = ({ data, file }: { data: Record<string, ClauseCardProps[
                                 setPage(1)
                             }}
                         >
-                            {key} {key === 'riba' ? '(Interest)' : '(Uncertainty)'}
+                            {key}
                         </button>
                     ))}
                 </div>

@@ -20,6 +20,7 @@ export const uploadFile = async (file: File) => {
         Object.keys(rulingData).forEach((ruling) => {
             obj[ruling] = rulingData[ruling].map((item: any) => ({
                 chunk: item?.metadata.chunk,
+                chunkPage: item?.metadata.chunk_page,
                 ruling: item?.metadata.ruling,
                 confidence: item?.confidence,
                 suggestion: item?.suggestion,

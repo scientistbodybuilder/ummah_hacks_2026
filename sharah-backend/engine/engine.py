@@ -199,7 +199,7 @@ SHARIAH_KB_PATH = Path(__file__).parent.parent / "data" / "knowledge_base"
 #         }
 
 # consider making concurrent request
-async def llm_verification(ruling: str, chunk: str):
+async def llm_verification(ruling: str, chunk: str, chunk_page: int):
 
     context_files = glob.glob(str(SHARIAH_KB_PATH / f"*{ruling}*.md"))
     print("Context files found:", context_files)
@@ -260,7 +260,8 @@ async def llm_verification(ruling: str, chunk: str):
             result['metadata'] = {
                 'chunk': chunk,
                 'ruling': ruling,
-                'model_used': model
+                'model_used': model,
+                'chunk_page': chunk_page
             }
             
             return result
