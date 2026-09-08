@@ -14,12 +14,15 @@ interface RecentUploadSheetProps {
     setResults: (data: any) => void
     setFileName: (fileName: string) => void
 }
+
+
+
 //receives list of uploaded files 
 const RecentUploadSheet  = ({ setResults, setFileName }: RecentUploadSheetProps) => {
     const queryClient = useQueryClient();
-    const getCachedUploadData = (file: string) => {
+    const getCachedUploadData = (file: string, hash: string) => {
         console.log('A')
-        const data = queryClient.getQueryData(['analysis', file]);
+        const data = queryClient.getQueryData(['analysis', hash]);
         console.log(`Fetching cached data for ${file}:`, data);
         if (data) {
             console.log(`Cached data found for ${file}:`, data);
@@ -28,7 +31,7 @@ const RecentUploadSheet  = ({ setResults, setFileName }: RecentUploadSheetProps)
         }
     }
 
-    const uploadedFiles: string[] = JSON.parse(sessionStorage.getItem('recentUploads') || '[]');
+    const uploadedFiles: Record<string, string>[] = JSON.parse(sessionStorage.getItem('recentUploads') || '[]');
 
     return (
         <Sheet>
@@ -44,12 +47,12 @@ const RecentUploadSheet  = ({ setResults, setFileName }: RecentUploadSheetProps)
                 </SheetHeader>
                 <div className="flex flex-col py-5">
                     {uploadedFiles.length > 0 ? (
-                        uploadedFiles.map((file, index) => (
+                        uploadedFiles.map((item, index) => (
                             // <SheetClose
                             //     render={
-                                    <div onClick={() => getCachedUploadData(file.split('-')[0])} key={index} className=" px-2 py-2 truncate w-full flex flex-col justify-start items-start rounded-sm text-xs text-(--accent-color) hover:text-(--accent-light) transition duration-100 hover:bg-(--background-dark) cursor-pointer">
-                                        <p className="text-muted-foreground">{file.split('-')[1]}</p>
-                                        {file.split('-')[0]}
+                                    <div onClick={() => getCachedUploadData(item.filename, item.hash)} key={index} className=" px-2 py-2 truncate w-full flex flex-col justify-start items-start rounded-sm text-xs text-(--accent-color) hover:text-(--accent-light) transition duration-100 hover:bg-(--background-dark) cursor-pointer">
+                                        <p className="text-muted-foreground">{item.timestamp}</p>
+                                        {item.filename}
                                     </div>
                             //     }
                             // />

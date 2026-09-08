@@ -1,7 +1,9 @@
 
 import type { ClauseCardProps } from '../components/analyze/ClauseCard'
 import pdfMake from 'pdfmake/build/pdfmake'
-import * as pdfFonts from 'pdfmake/build/vfs_fonts'
+import * as pdfFontsModule from 'pdfmake/build/vfs_fonts'
+
+const pdfFonts = (pdfFontsModule as any).default ?? pdfFontsModule
 pdfMake.addVirtualFileSystem(pdfFonts)
 import type { Content, TDocumentDefinitions } from 'pdfmake/interfaces'
 
@@ -98,7 +100,7 @@ export const buildReport = ({ data, file }: { data: Record<string, ClauseCardPro
         defaultStyle: { fontSize: 10, lineHeight: 1.2 },
     }
 
-    const fileName = `${sanitizeFileName(file || 'shariah-analysis') || 'shariah-analysis'}-report.pdf`
+    const fileName = `${sanitizeFileName(file || 'shariah-analysis') || 'shariah-analysis'}-sharah_report.pdf`
     pdfMake.createPdf(document).download(fileName)
 
     

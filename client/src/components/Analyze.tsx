@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner"
 import { Button } from "./ui/button";
-import { uploadFile } from '../services/uploadServices'
+import { uploadFile, hashFile } from '../services/uploadServices'
 import ClauseBreakdown from './analyze/ClauseBreakdown'
 import RecentUploadSheet from './analyze/RecentUploadSheet'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -31,22 +31,37 @@ const Analyze = () => {
   const [errors, setErrors] = useState<ErrorTypes>({});
   // const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<Record<string, ClauseCardProps[]>>({});
+  const [existingCachedData, setExistingCachedData] = useState<Record<string, ClauseCardProps[]> | null>(null);
   const queryClient = useQueryClient();
   const handleFile = (file?: File) => {
     if (file && file.type === 'application/pdf') {
+      console.log('File selected:', file);
       setFileName(file.name);
       setSelectedFile(file);
+      //  check whether the same file is already cached
+      const hash = hashFile(file,false);
+      console.log('cache hash:', hash);
+      const cachedData = queryClient.getQueryData(['analysis', hash]);
+      console.log('cached data:', cachedData);
+      if (cachedData) {
+          setExistingCachedData(cachedData as Record<string, ClauseCardProps[]>);
+          // setFileName(file.name);
+          // setSelectedFile(file);
+          // return;
+      }
+
+      
     } else {
       setErrors({ ...errors, file: "Please upload a valid PDF file." });
     }
   };
 
   const { mutate: analyzeFile, isPending } = useMutation({
-      mutationFn: (file: File) => uploadFile(file),
-      onSuccess: (data, file) => {
+      mutationFn: (file: File) => uploadFile(file, !!existingCachedData),
+      onSuccess: (data) => {
           console.log('analyze result:', data)
-          setResults(data)
-          queryClient.setQueryData(['analysis', file.name], data)
+          setResults(data.data)
+          queryClient.setQueryData(['analysis', data.hash], data.data)
       },
       onError: (err) => {
           console.error('Error uploading file:', err)
@@ -56,9 +71,19 @@ const Analyze = () => {
 
   const handleAnalyze = () => {
       if (selectedFile) {
-        // setResults({})
+        // 
         analyzeFile(selectedFile)
+        setSelectedFile(null)
+        setExistingCachedData(null) // reset
       }
+  }
+
+  const retrieveExistingCache = () => {
+    if (existingCachedData) {
+      setSelectedFile(null)
+      setResults(existingCachedData);
+      setExistingCachedData(null) // reset
+    }
   }
 
   return (
@@ -142,9 +167,15 @@ const Analyze = () => {
           />
         </div>
           {errors?.file && <p className="text-(--non-compliant) text-xs text-center">{errors.file}.</p>}
+
+        {existingCachedData && <p className="text-muted-foreground text-xs text-center">
+          Cached data found for this file. Click <span onClick={() => retrieveExistingCache()} className="text-(--accent-color) hover:text-(--accent-light) hover:underline cursor-pointer">here</span> to retrieve. Otherwise, click "Analyze" to re-analyze.
+        </p>}
+
         <Button onClick={() => handleAnalyze()} disabled={selectedFile === null || isPending} className='bg-(--accent-color) w-full rounded-md cursor-pointer hover:bg-(--accent-color)/90'>
             { isPending ? <Spinner /> : "Analyze" }
         </Button>
+
         <div className="feature-grid">
           <Feature icon={<ShieldCheck />} title="AAOIFI Shariah Standards">
             Evaluates Riba al-Nasi'ah, interest capitalization, and default
